@@ -1,0 +1,72 @@
+# Logs directory
+logs/
+*.log
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+
+# Virtual Environment
+venv/
+env/
+ENV/
+.venv
+
+# Environment variables
+.env
+
+# Google credentials
+config/google_credentials.json
+
+# Resume (keep template, ignore actual resume)
+data/resume.pdf
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Jupyter Notebook
+.ipynb_checkpoints
+
+# Testing
+.pytest_cache/
+.coverage
+htmlcov/
+
+# Temporary files
+*.tmp
+*.bak
+
+# Documentation (for personal reference only)
+START_HERE.md
+QUICKSTART.md
+PROJECT_SUMMARY.md
+N8N_VS_PYTHON.md
+
+# Original n8n workflow
+Linkedin Job Search.json
