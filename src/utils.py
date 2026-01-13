@@ -218,12 +218,13 @@ def clean_html_text(html_text: str) -> str:
         html_text: HTML text to clean
     
     Returns:
-        Cleaned text
+        Cleaned text with normalized whitespace
     """
     import re
-    # Remove extra whitespace
+    # Remove extra whitespace (\\s+ matches one or more whitespace characters)
+    # This includes spaces, tabs, newlines, and carriage returns
     text = re.sub(r'\s+', ' ', html_text)
-    # Remove leading/trailing whitespace
+    # Remove leading/trailing whitespace from the entire string
     text = text.strip()
     return text
 
