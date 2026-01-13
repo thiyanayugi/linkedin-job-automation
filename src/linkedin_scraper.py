@@ -1,6 +1,8 @@
 """
 LinkedIn Scraper Module
-Fetches and parses LinkedIn job listings.
+
+Fetches and parses LinkedIn job listings using HTTP requests and BeautifulSoup.
+Implements rate limiting and retry logic to handle network issues gracefully.
 """
 
 import re
