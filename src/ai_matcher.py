@@ -32,12 +32,16 @@ class AIMatcher:
         """
         Create the prompt for job matching and cover letter generation.
         
+        Constructs a detailed prompt that instructs the AI to analyze the resume
+        against the job description, calculate a matching score (0-100), and
+        generate a tailored cover letter.
+        
         Args:
             resume_text: Text content of the resume
             job_description: Job description text
         
         Returns:
-            Formatted prompt
+            Formatted prompt string ready for OpenAI API
         """
         prompt = f"""Hi, you are a helpful job matcher. You read my resume then analyze the given resume and job description and provide a job matching score. Also write a cover letter based on my resume and the job description. 
 
