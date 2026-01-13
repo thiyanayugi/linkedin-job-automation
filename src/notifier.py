@@ -46,10 +46,13 @@ class TelegramNotifier:
     @retry_on_failure(max_retries=3, delay=2.0)
     def send_message(self, message: str) -> bool:
         """
-        Send a text message via Telegram.
+        Send a text message via Telegram with HTML formatting support.
+        
+        Messages are sent with HTML parse mode enabled, allowing for
+        rich formatting like <b>bold</b>, <i>italic</i>, and <a>links</a>.
         
         Args:
-            message: Message text to send
+            message: Message text to send (supports HTML formatting)
         
         Returns:
             True if successful, False otherwise
