@@ -144,20 +144,28 @@ def rate_limit(calls: int = 1, period: float = 1.0) -> Callable:
 
 def sanitize_filename(filename: str) -> str:
     """
-    Sanitize a string to be used as a filename.
+    Sanitize a string to be used as a safe filesystem filename.
+    
+    Removes invalid characters that are not allowed in Windows/Unix filenames,
+    replaces spaces with underscores, and enforces a maximum length.
     
     Args:
-        filename: Original filename
+        filename: Original filename string to sanitize
     
     Returns:
-        Sanitized filename
+        Sanitized filename safe for filesystem operations
+        
+    Note:
+        - Removes: < > : " / \ | ? *
+        - Replaces spaces with underscores
+        - Maximum length: 200 characters
     """
     import re
-    # Remove invalid characters
+    # Remove invalid characters for cross-platform compatibility
     filename = re.sub(r'[<>:"/\\|?*]', '', filename)
-    # Replace spaces with underscores
+    # Replace spaces with underscores for better compatibility
     filename = filename.replace(' ', '_')
-    # Limit length
+    # Limit length to prevent filesystem issues
     if len(filename) > 200:
         filename = filename[:200]
     return filename
