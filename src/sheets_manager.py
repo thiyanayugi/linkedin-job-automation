@@ -41,7 +41,17 @@ class SheetsManager:
         logger.info(f"Initialized SheetsManager for sheet: {sheet_id}")
     
     def _authenticate(self):
-        """Authenticate with Google Sheets API."""
+        """
+        Authenticate with Google Sheets API using service account credentials.
+        
+        Establishes connection to Google Sheets API using OAuth2 credentials
+        from the service account JSON file. Requires both Sheets and Drive scopes
+        for full read/write access.
+        
+        Raises:
+            FileNotFoundError: If credentials file doesn't exist
+            Exception: If authentication fails or sheet cannot be accessed
+        """
         try:
             credentials = Credentials.from_service_account_file(
                 self.credentials_file,
