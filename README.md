@@ -4,13 +4,13 @@ A Python-based automation tool that searches LinkedIn for jobs, matches them aga
 
 ## Features
 
-- 🔍 **Automated LinkedIn Job Search** - Searches based on your criteria (keywords, location, experience level, etc.)
-- 🤖 **AI-Powered Matching** - Uses OpenAI to score job compatibility (0-100) with your resume
-- ✍️ **Auto Cover Letter Generation** - Creates personalized cover letters for each job
-- 📊 **Google Sheets Integration** - Saves all job details, scores, and cover letters
-- 📱 **Telegram Notifications** - Get notified instantly for high-scoring jobs
-- ⏰ **Scheduled Execution** - Runs automatically at your preferred time
-- 🎯 **Smart Filtering** - Only saves jobs above your score threshold
+- 🔍 **Automated LinkedIn Job Search** - Searches LinkedIn based on customizable criteria including keywords, location, experience level, remote work preferences, and job type
+- 🤖 **AI-Powered Matching** - Leverages OpenAI's GPT models to intelligently score job compatibility (0-100 scale) by analyzing your resume against job descriptions
+- ✍️ **Auto Cover Letter Generation** - Creates personalized, tailored cover letters for each job opportunity using AI analysis
+- 📊 **Google Sheets Integration** - Automatically saves all job details, compatibility scores, and generated cover letters to a centralized spreadsheet
+- 📱 **Telegram Notifications** - Receive instant push notifications for high-scoring job matches directly to your Telegram account
+- ⏰ **Scheduled Execution** - Configure the automation to run at your preferred time daily using built-in scheduling
+- 🎯 **Smart Filtering** - Intelligently filters and saves only jobs that meet or exceed your minimum score threshold
 
 ## Prerequisites
 
