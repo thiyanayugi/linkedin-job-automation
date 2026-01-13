@@ -1,5 +1,8 @@
 """
-Utility functions for the LinkedIn Job Automation project.
+Utility Functions Module
+
+Provides reusable helper functions for the LinkedIn Job Automation project,
+including logging setup, retry mechanisms, rate limiting, and text processing.
 """
 
 import logging
