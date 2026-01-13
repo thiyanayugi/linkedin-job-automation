@@ -103,16 +103,24 @@ def retry_on_failure(max_retries: int = 3, delay: float = 1.0, backoff: float = 
     return decorator
 
 
-def rate_limit(calls: int = 1, period: float = 1.0):
+def rate_limit(calls: int = 1, period: float = 1.0) -> Callable:
     """
-    Decorator to rate limit function calls.
+    Decorator to rate limit function calls to prevent API throttling.
+    
+    This decorator ensures that a function is called at most 'calls' times
+    within a 'period' second window, adding delays as necessary.
     
     Args:
-        calls: Number of calls allowed
-        period: Time period in seconds
+        calls: Number of calls allowed within the period
+        period: Time period in seconds for the rate limit window
     
     Returns:
-        Decorated function
+        Decorated function with rate limiting applied
+        
+    Example:
+        @rate_limit(calls=10, period=60.0)  # Max 10 calls per minute
+        def api_call():
+            pass
     """
     min_interval = period / calls
     last_called = [0.0]
