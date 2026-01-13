@@ -82,13 +82,20 @@ class ResumeParser:
     
     def extract_text(self, method: str = "auto") -> str:
         """
-        Extract text from PDF using specified method.
+        Extract text from PDF using specified method with automatic fallback.
+        
+        The 'auto' method attempts pdfplumber first (more accurate for complex PDFs
+        with tables and formatting), then falls back to PyPDF2 if pdfplumber fails
+        or produces insufficient text.
         
         Args:
-            method: Extraction method ('pypdf2', 'pdfplumber', or 'auto')
+            method: Extraction method - 'pypdf2', 'pdfplumber', or 'auto' (recommended)
         
         Returns:
             Extracted text from PDF
+            
+        Raises:
+            Exception: If all extraction methods fail
         """
         if method == "auto":
             # Try pdfplumber first (more accurate), fallback to PyPDF2
