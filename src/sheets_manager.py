@@ -1,6 +1,8 @@
 """
 Google Sheets Manager Module
-Handles reading from and writing to Google Sheets.
+
+Handles reading from and writing to Google Sheets using the gspread library
+and Google Sheets API v4. Manages job data storage and filter configuration.
 """
 
 import os
