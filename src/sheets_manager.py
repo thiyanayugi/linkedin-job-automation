@@ -223,10 +223,19 @@ class SheetsManager:
     
     def ensure_headers(self, worksheet_name: str = "Sheet1"):
         """
-        Ensure the worksheet has proper headers.
+        Ensure the worksheet has proper headers for job data storage.
+        
+        Validates that the worksheet has the correct header row with all
+        required columns. If headers are missing or incorrect, they will
+        be added or inserted at the top of the sheet.
+        
+        Expected headers: Title, Company, Location, Link, Score, Description, Cover Letter
         
         Args:
-            worksheet_name: Name of the worksheet
+            worksheet_name: Name of the worksheet to validate
+            
+        Raises:
+            Exception: If worksheet access or header insertion fails
         """
         try:
             worksheet = self.spreadsheet.worksheet(worksheet_name)
@@ -234,12 +243,15 @@ class SheetsManager:
             # Check if sheet is empty or has no headers
             all_values = worksheet.get_all_values()
             
+            # Define expected header structure
             if not all_values or all_values[0] != ['Title', 'Company', 'Location', 'Link', 'Score', 'Description', 'Cover Letter']:
                 headers = ['Title', 'Company', 'Location', 'Link', 'Score', 'Description', 'Cover Letter']
                 
                 if not all_values:
+                    # Sheet is empty, append headers
                     worksheet.append_row(headers, value_input_option='USER_ENTERED')
                 else:
+                    # Sheet has data but wrong headers, insert at top
                     worksheet.insert_row(headers, index=1, value_input_option='USER_ENTERED')
                 
                 logger.info(f"Added headers to worksheet: {worksheet_name}")
