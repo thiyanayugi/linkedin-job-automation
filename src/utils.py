@@ -62,17 +62,17 @@ def setup_logger(name: str, log_file: str = None, level: str = "INFO") -> loggin
     return logger
 
 
-def retry_on_failure(max_retries: int = 3, delay: float = 1.0, backoff: float = 2.0):
+def retry_on_failure(max_retries: int = 3, delay: float = 1.0, backoff: float = 2.0) -> Callable:
     """
     Decorator to retry a function on failure with exponential backoff.
     
     Args:
-        max_retries: Maximum number of retry attempts
-        delay: Initial delay between retries in seconds
-        backoff: Multiplier for delay after each retry
+        max_retries: Maximum number of retry attempts (must be >= 0)
+        delay: Initial delay between retries in seconds (must be > 0)
+        backoff: Multiplier for delay after each retry (must be >= 1.0)
     
     Returns:
-        Decorated function
+        Decorated function with retry logic applied
     """
     def decorator(func: Callable) -> Callable:
         @wraps(func)
