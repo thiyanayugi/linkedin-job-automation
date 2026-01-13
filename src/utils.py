@@ -173,13 +173,16 @@ def sanitize_filename(filename: str) -> str:
 
 def parse_time_string(time_str: str) -> tuple:
     """
-    Parse a time string in HH:MM format.
+    Parse a time string in HH:MM format and validate the values.
     
     Args:
-        time_str: Time string (e.g., "17:00")
+        time_str: Time string in 24-hour format (e.g., "17:00", "09:30")
     
     Returns:
-        Tuple of (hour, minute)
+        Tuple of (hour, minute) as integers
+        
+    Raises:
+        ValueError: If the time format is invalid or values are out of range
     """
     try:
         hour, minute = map(int, time_str.split(':'))
