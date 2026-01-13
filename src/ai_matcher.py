@@ -116,7 +116,10 @@ Remember: Return ONLY the JSON object, no other text."""
                 return {"score": 0, "coverLetter": ""}
             
             # Ensure score is an integer between 0 and 100
+            # Convert to int in case AI returns a float
             score = int(result['score'])
+            # Clamp score to valid range: max(0, min(100, score))
+            # This prevents invalid scores like -10 or 150
             score = max(0, min(100, score))
             
             logger.info(f"Job matching complete - Score: {score}")
