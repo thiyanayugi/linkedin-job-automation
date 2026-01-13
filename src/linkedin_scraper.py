@@ -41,24 +41,30 @@ class LinkedInScraper:
         """
         Build LinkedIn search URL from filters.
         
+        Constructs a LinkedIn job search URL by encoding filter parameters
+        into query string format. Uses LinkedIn's specific parameter codes
+        for experience levels, remote work types, and job types.
+        
         Args:
-            filters: Dictionary containing search filters
+            filters: Dictionary containing search filters (keyword, location, etc.)
         
         Returns:
-            LinkedIn search URL
+            LinkedIn search URL with encoded filter parameters
         """
-        # Base URL with jobs from last 24 hours
+        # Base URL with jobs from last 24 hours (f_TPR=r86400)
+        # r86400 = recent 86400 seconds (24 hours)
         url = "https://www.linkedin.com/jobs/search/?f_TPR=r86400"
         
-        # Add keyword
+        # Add keyword search term
         if filters.get("keyword"):
             url += f"&keywords={filters['keyword']}"
         
-        # Add location
+        # Add geographic location filter
         if filters.get("location"):
             url += f"&location={filters['location']}"
         
-        # Add experience level
+        # Add experience level filter (f_E parameter)
+        # LinkedIn uses numeric codes: 1=Internship, 2=Entry, 3=Associate, etc.
         if filters.get("experience_level"):
             experience_map = {
                 "Internship": "1",
@@ -75,7 +81,8 @@ class LinkedInScraper:
             if level_codes:
                 url += f"&f_E={','.join(level_codes)}"
         
-        # Add remote/work type
+        # Add remote/work type filter (f_WT parameter)
+        # 1=On-Site, 2=Remote, 3=Hybrid
         if filters.get("remote"):
             remote_map = {
                 "On-Site": "1",
@@ -89,7 +96,8 @@ class LinkedInScraper:
             if remote_codes:
                 url += f"&f_WT={','.join(remote_codes)}"
         
-        # Add job type
+        # Add job type filter (f_JT parameter)
+        # F=Full-time, P=Part-time, C=Contract, T=Temporary, etc.
         if filters.get("job_type"):
             job_type_map = {
                 "Full-time": "F",
@@ -106,7 +114,8 @@ class LinkedInScraper:
             if job_codes:
                 url += f"&f_JT={','.join(job_codes)}"
         
-        # Add easy apply filter
+        # Add easy apply filter (f_EA=true)
+        # Filters jobs that have LinkedIn's "Easy Apply" feature
         if filters.get("easy_apply"):
             url += "&f_EA=true"
         
