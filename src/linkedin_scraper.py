@@ -198,13 +198,19 @@ class LinkedInScraper:
     @rate_limit(calls=1, period=2.0)
     def fetch_job_details(self, job_url: str) -> Optional[Dict[str, str]]:
         """
-        Fetch detailed information for a specific job.
+        Download and parse the full HTML page for a specific job posting.
+        
+        Extracts key data points (title, company, location, and description)
+        by targeting specific LinkedIn DOM elements with BeautifulSoup. Also
+        attempts to isolate the unique job ID to generate a canonical apply link.
         
         Args:
-            job_url: URL of the job posting
+            job_url: Absolute URL of the individual job posting.
         
         Returns:
-            Dictionary containing job details
+            Dictionary containing 'url', 'title', 'company', 'location',
+            'description', 'job_id', and 'apply_link'. Returns None if 
+            the request fails or parsing causes an error.
         """
         logger.info(f"Fetching job details from: {job_url}")
         
