@@ -160,11 +160,19 @@ class SheetsManager:
     @retry_on_failure(max_retries=3, delay=2.0)
     def update_or_append_job(self, job_data: Dict[str, any], worksheet_name: str = "Sheet1"):
         """
-        Update existing job or append new one based on job link.
+        Upsert a job record: update if the apply_link already exists, else append.
+        
+        Scans all existing rows (excluding the header) for a matching apply_link
+        in column 4. If a match is found the row is updated in-place; otherwise
+        a new row is appended. Adds headers automatically if the sheet is empty.
         
         Args:
-            job_data: Dictionary containing job information
-            worksheet_name: Name of the worksheet
+            job_data: Dictionary containing job information.
+            worksheet_name: Target worksheet name (default: 'Sheet1').
+            
+        Raises:
+            gspread.exceptions.WorksheetNotFound: If the worksheet doesn't exist.
+            Exception: If the Sheets API call fails after all retries.
         """
         try:
             worksheet = self.spreadsheet.worksheet(worksheet_name)
@@ -217,11 +225,15 @@ class SheetsManager:
     
     def batch_append_jobs(self, jobs: List[Dict[str, any]], worksheet_name: str = "Sheet1"):
         """
-        Append multiple jobs to the Google Sheet.
+        Write multiple job records to the worksheet, one at a time.
+        
+        Iterates over the job list and calls update_or_append_job() for each
+        entry. Individual failures are logged and skipped so that a single bad
+        record does not abort the entire batch.
         
         Args:
-            jobs: List of job dictionaries
-            worksheet_name: Name of the worksheet
+            jobs: List of job dictionaries to persist.
+            worksheet_name: Target worksheet name (default: 'Sheet1').
         """
         logger.info(f"Batch appending {len(jobs)} jobs to sheet")
         
