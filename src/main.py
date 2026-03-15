@@ -34,7 +34,13 @@ logger = setup_logger(
 
 
 class JobSearchAutomation:
-    """Main automation orchestrator."""
+    """
+    Main orchestrator for the LinkedIn job search automation pipeline.
+    
+    Coordinates all sub-components (scraper, AI matcher, Sheets manager,
+    and Telegram notifier) to execute a complete end-to-end job search run.
+    Configuration is loaded from environment variables and config/filters.json.
+    """
     
     def __init__(self):
         """Initialize the automation with all components."""
