@@ -81,13 +81,18 @@ class TelegramNotifier:
     
     def send_job_notification(self, job_data: dict) -> bool:
         """
-        Send a formatted job notification.
+        Format and send a rich job match notification via Telegram.
+        
+        Delegates formatting to _format_job_message() and sends the result
+        through the Telegram bot. Returns False immediately if notifications
+        are disabled.
         
         Args:
-            job_data: Dictionary containing job information
+            job_data: Dictionary with keys 'title', 'company', 'location',
+                      'score', and 'apply_link'.
         
         Returns:
-            True if successful, False otherwise
+            True if the message was delivered, False otherwise.
         """
         if not self.enabled:
             return False
@@ -99,13 +104,17 @@ class TelegramNotifier:
     
     def _format_job_message(self, job_data: dict) -> str:
         """
-        Format a job notification message.
+        Build an HTML-formatted Telegram message for a single job match.
+        
+        Pulls title, company, location, score, and apply_link from job_data,
+        supplying sensible defaults when fields are missing. The returned
+        string uses HTML tags supported by Telegram's parse_mode='HTML'.
         
         Args:
-            job_data: Dictionary containing job information
+            job_data: Dictionary containing job fields
         
         Returns:
-            Formatted message string
+            HTML-formatted notification string
         """
         title = job_data.get('title', 'Unknown Position')
         company = job_data.get('company', 'Unknown Company')
