@@ -104,7 +104,13 @@ class JobSearchAutomation:
         return config
     
     def _initialize_components(self):
-        """Initialize all automation components."""
+        """
+        Instantiate and configure all automation sub-components.
+        
+        Creates instances of ResumeParser, LinkedInScraper, AIMatcher,
+        SheetsManager, and TelegramNotifier using values from self.config.
+        Raises an exception and logs the error if any component fails to start.
+        """
         try:
             # Resume Parser
             logger.info("Initializing Resume Parser...")
@@ -141,7 +147,15 @@ class JobSearchAutomation:
             raise
     
     def _load_filters(self) -> dict:
-        """Load job search filters from file."""
+        """
+        Load job search filter criteria from the JSON configuration file.
+        
+        Returns:
+            dict: Filter parameters (keyword, location, experience_level, etc.)
+            
+        Raises:
+            FileNotFoundError: If config/filters.json does not exist.
+        """
         filters_path = self.config['filters_path']
         
         if not os.path.exists(filters_path):
