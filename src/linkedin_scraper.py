@@ -20,10 +20,15 @@ class LinkedInScraper:
     
     def __init__(self, delay_seconds: int = 10):
         """
-        Initialize the LinkedIn scraper.
+        Initialize the LinkedIn scraper with a configured HTTP session.
+        
+        Configures a persistent requests.Session() with appropriate headers
+        (User-Agent, Accept, etc.) to mimic a real web browser and reduce
+        the likelihood of being blocked by LinkedIn's anti-scraping measures.
         
         Args:
-            delay_seconds: Delay between requests to avoid rate limiting
+            delay_seconds: Minimum wait time between requests to avoid rate
+                           limiting or connection resets (default: 10s).
         """
         self.delay_seconds = delay_seconds
         self.session = requests.Session()
