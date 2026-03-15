@@ -313,16 +313,20 @@ class LinkedInScraper:
             logger.warning("No job links found in search results")
             return []
         
-        # Limit number of jobs
+        # Limit the total number of jobs to fetch to avoid exhausting rate limits
+        # or taking too long to run the automation pipeline.
         job_links = job_links[:max_jobs]
         logger.info(f"Processing {len(job_links)} jobs")
         
-        # Fetch details for each job
+        # Sequentially fetch and parse the details for each isolated job link.
+        # This is performed synchronously to ensure delays between requests 
+        # are respected and an IP ban is avoided.
         jobs = []
         for i, job_url in enumerate(job_links, 1):
             logger.info(f"Processing job {i}/{len(job_links)}")
             
             job_data = self.fetch_job_details(job_url)
+            # Only append successfully parsed jobs (failures return None)
             if job_data:
                 jobs.append(job_data)
         
