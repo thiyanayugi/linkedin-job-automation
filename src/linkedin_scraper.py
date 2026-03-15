@@ -284,14 +284,19 @@ class LinkedInScraper:
     
     def search_jobs(self, filters: Dict[str, any], max_jobs: int = 25) -> List[Dict[str, str]]:
         """
-        Search for jobs based on filters and return detailed information.
+        Orchestrate the end-to-end LinkedIn job search process.
+        
+        Acts as the primary entry point for the scraper module. Constructs a 
+        filtered search URL, fetches the search results page, extracts individual
+        job posting URLs, and then loops over them to scrape detailed job data.
         
         Args:
-            filters: Dictionary containing search filters
-            max_jobs: Maximum number of jobs to fetch details for
+            filters: Dictionary containing search filters (keyword, location, etc.).
+            max_jobs: Limit on the number of detailed jobs to fetch (default: 25).
+                      Prevents excessively long runs and rate limit exhaustion.
         
         Returns:
-            List of job dictionaries
+            List of dictionaries, where each dictionary represents a parsed job.
         """
         logger.info(f"Starting job search with filters: {filters}")
         
