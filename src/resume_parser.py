@@ -1,6 +1,8 @@
 """
 Resume Parser Module
-Extracts text from PDF resume files.
+
+Extracts plain text from PDF resume files using PyPDF2 and pdfplumber,
+with automatic fallback between engines for maximum compatibility.
 """
 
 import os
@@ -13,7 +15,12 @@ logger = setup_logger(__name__)
 
 
 class ResumeParser:
-    """Parse and extract text from PDF resume files."""
+    """
+    Parse and extract text from a PDF resume file.
+    
+    Supports two extraction backends (PyPDF2 and pdfplumber) and selects
+    the most suitable one automatically via the 'auto' mode.
+    """
     
     def __init__(self, resume_path: str):
         """
@@ -135,10 +142,14 @@ class ResumeParser:
     
     def get_resume_text(self) -> Optional[str]:
         """
-        Get the cached resume text or extract if not already done.
+        Return cached resume text, extracting it first if necessary.
+        
+        Calls extract_text() with the default 'auto' method on the first
+        invocation and caches the result in self.resume_text for subsequent
+        calls.
         
         Returns:
-            Resume text
+            Extracted resume text string, or None if extraction failed.
         """
         if self.resume_text is None:
             self.extract_text()
@@ -146,13 +157,16 @@ class ResumeParser:
     
     def get_resume_summary(self, max_chars: int = 200) -> str:
         """
-        Get a summary of the resume (first N characters).
+        Return a short preview of the extracted resume text.
+        
+        Useful for logging or quick sanity-checks without printing the
+        entire resume. Appends '...' when the text is truncated.
         
         Args:
-            max_chars: Maximum number of characters to return
+            max_chars: Maximum number of characters to include in the preview.
         
         Returns:
-            Resume summary
+            Truncated resume text string (empty string if no text available).
         """
         text = self.get_resume_text()
         if not text:
