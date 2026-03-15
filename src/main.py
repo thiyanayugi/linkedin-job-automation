@@ -169,7 +169,21 @@ class JobSearchAutomation:
         return filters
     
     def run(self):
-        """Execute the job search automation."""
+        """
+        Execute the full job search automation pipeline.
+        
+        Runs the following six sequential steps:
+            1. Extract text from the resume PDF.
+            2. Load job search filters from config/filters.json.
+            3. Scrape LinkedIn for matching job listings.
+            4. Score each job and generate a cover letter via AI.
+            5. Filter jobs that meet the minimum score threshold.
+            6. Persist results to Google Sheets and send Telegram alerts.
+            
+        Raises:
+            Exception: Any unhandled error is logged, an error notification is
+                       sent via Telegram, and the exception is re-raised.
+        """
         start_time = datetime.now()
         logger.info("="*80)
         logger.info(f"Starting job search automation at {start_time.strftime('%Y-%m-%d %H:%M:%S')}")
