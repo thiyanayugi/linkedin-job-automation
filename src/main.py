@@ -305,7 +305,17 @@ def run_scheduled():
 
 
 def main():
-    """Main entry point."""
+    """
+    CLI entry point for the LinkedIn Job Search Automation tool.
+    
+    Parses command-line arguments:
+        (no args)    Run the full pipeline once and exit.
+        --schedule   Run the pipeline daily at the time set in SCHEDULE_TIME.
+        
+    Exit codes:
+        0  – Successful completion or user-interrupted scheduler.
+        1  – Fatal unhandled exception during execution.
+    """
     parser = argparse.ArgumentParser(
         description='LinkedIn Job Search Automation',
         formatter_class=argparse.RawDescriptionHelpFormatter,
