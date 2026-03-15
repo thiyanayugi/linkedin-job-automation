@@ -260,13 +260,26 @@ class JobSearchAutomation:
 
 
 def run_once():
-    """Run the automation once."""
+    """
+    Instantiate JobSearchAutomation and execute a single pipeline run.
+    
+    This is the default mode when the script is invoked without --schedule.
+    """
     automation = JobSearchAutomation()
     automation.run()
 
 
 def run_scheduled():
-    """Run the automation on a schedule."""
+    """
+    Schedule the automation to execute once per day at the configured time.
+    
+    Reads SCHEDULE_TIME from the environment (default '17:00') and registers
+    the job with the 'schedule' library. Loops indefinitely, checking for
+    pending tasks every 60 seconds. Exits cleanly on KeyboardInterrupt.
+    
+    Raises:
+        SystemExit: If SCHEDULE_TIME is not a valid HH:MM string.
+    """
     schedule_time = os.getenv('SCHEDULE_TIME', '17:00')
     
     try:
