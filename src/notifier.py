@@ -135,15 +135,18 @@ class TelegramNotifier:
     
     def send_batch_summary(self, total_jobs: int, matched_jobs: int, high_score_jobs: int) -> bool:
         """
-        Send a summary of the job search batch.
+        Send a formatted summary of the completed job search batch.
+        
+        Builds a summary message displaying the three key metrics and delivers
+        it via Telegram. Useful for a quick end-of-run status report.
         
         Args:
-            total_jobs: Total number of jobs found
-            matched_jobs: Number of jobs matched
-            high_score_jobs: Number of high-scoring jobs
+            total_jobs: Total number of LinkedIn job listings found.
+            matched_jobs: Number of jobs that were successfully AI-scored.
+            high_score_jobs: Number of jobs that exceeded the score threshold.
         
         Returns:
-            True if successful, False otherwise
+            True if the summary was delivered, False otherwise.
         """
         if not self.enabled:
             return False
@@ -160,13 +163,16 @@ Check your Google Sheet for details!"""
     
     def send_error_notification(self, error_message: str) -> bool:
         """
-        Send an error notification.
+        Deliver an error alert to the configured Telegram chat.
+        
+        Wraps the raw error string in a descriptive HTML-formatted message
+        so the user is informed of failures without having to inspect logs.
         
         Args:
-            error_message: Error message to send
+            error_message: Human-readable description of the error that occurred.
         
         Returns:
-            True if successful, False otherwise
+            True if the alert was delivered successfully, False otherwise.
         """
         if not self.enabled:
             return False
