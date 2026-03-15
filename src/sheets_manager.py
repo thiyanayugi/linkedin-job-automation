@@ -72,13 +72,18 @@ class SheetsManager:
     @retry_on_failure(max_retries=3, delay=2.0)
     def read_filters(self, worksheet_name: str = "Filter") -> Optional[Dict[str, any]]:
         """
-        Read job search filters from Google Sheet.
+        Read job search filter criteria from the designated worksheet.
+        
+        Expects the worksheet to have a header row (row 1) and a single
+        data row (row 2). Returns a dictionary mapping each header to its
+        corresponding value. Returns None if the sheet has fewer than two rows.
         
         Args:
-            worksheet_name: Name of the worksheet containing filters
+            worksheet_name: Name of the Google Sheets tab containing filters
+                            (default: 'Filter').
         
         Returns:
-            Dictionary of filters
+            Dictionary of filter parameters, or None if data is insufficient.
         """
         try:
             worksheet = self.spreadsheet.worksheet(worksheet_name)
@@ -112,11 +117,19 @@ class SheetsManager:
     @retry_on_failure(max_retries=3, delay=2.0)
     def append_job(self, job_data: Dict[str, any], worksheet_name: str = "Sheet1"):
         """
-        Append a job to the Google Sheet.
+        Append a single job record as a new row in the specified worksheet.
+        
+        Maps the following job_data keys to sheet columns in order:
+        Title, Company, Location, Link, Score, Description, Cover Letter.
+        Missing keys default to an empty string or 0 for numeric fields.
         
         Args:
-            job_data: Dictionary containing job information
-            worksheet_name: Name of the worksheet to append to
+            job_data: Dictionary containing job information.
+            worksheet_name: Target worksheet name (default: 'Sheet1').
+            
+        Raises:
+            gspread.exceptions.WorksheetNotFound: If the worksheet doesn't exist.
+            Exception: If the Sheets API call fails after all retries.
         """
         try:
             worksheet = self.spreadsheet.worksheet(worksheet_name)
