@@ -63,7 +63,21 @@ class JobSearchAutomation:
         logger.info("Initialization complete")
     
     def _load_config(self) -> dict:
-        """Load configuration from environment and files."""
+        """
+        Load and validate configuration from environment variables and files.
+        
+        Reads all required settings from the process environment (via .env)
+        and assembles them into a single configuration dictionary. Raises a
+        ValueError if any required key is absent.
+        
+        Returns:
+            dict: Configuration mapping with keys such as 'openai_api_key',
+                  'google_credentials', 'google_sheet_id', 'resume_path',
+                  'min_score', 'max_jobs', and 'request_delay'.
+                  
+        Raises:
+            ValueError: If one or more required configuration keys are missing.
+        """
         config = {
             'openai_api_key': os.getenv('OPENAI_API_KEY'),
             'openai_model': os.getenv('OPENAI_MODEL', 'gpt-4o-mini'),
