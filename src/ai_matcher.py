@@ -147,14 +147,20 @@ Remember: Return ONLY the JSON object, no other text."""
     
     def batch_match_jobs(self, resume_text: str, jobs: list) -> list:
         """
-        Match multiple jobs with the resume.
+        Process a list of job postings and return those successfully scored.
+        
+        Iterates over the provided jobs array, calling match_job() for each.
+        Jobs that cannot be scored (due to missing descriptions, network errors,
+        or malformed AI output) are logged and skipped without breaking the batch.
+        Successfully scored jobs are decorated with 'score' and 'coverLetter' keys.
         
         Args:
-            resume_text: Text content of the resume
-            jobs: List of job dictionaries
+            resume_text: Text content of the applicant's resume.
+            jobs: List of job dictionaries, each containing 'description'.
         
         Returns:
-            List of jobs with added 'score' and 'coverLetter' fields
+            A new list containing only the job dictionaries that were
+            successfully evaluated by the AI matcher.
         """
         logger.info(f"Starting batch matching for {len(jobs)} jobs")
         
