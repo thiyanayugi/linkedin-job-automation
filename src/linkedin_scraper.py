@@ -133,13 +133,20 @@ class LinkedInScraper:
     @rate_limit(calls=1, period=2.0)
     def fetch_search_results(self, search_url: str) -> str:
         """
-        Fetch the search results page HTML.
+        Execute an HTTP GET request to retrieve job search results.
+        
+        Uses the configured requests.Session to fetch the HTML content of the
+        LinkedIn search page. Includes a timeout of 30 seconds and raises an
+        exception if the server returns an HTTP error status.
         
         Args:
-            search_url: LinkedIn search URL
+            search_url: The fully constructed LinkedIn jobs search URL.
         
         Returns:
-            HTML content of the search results page
+            Raw HTML content of the target search page.
+            
+        Raises:
+            requests.exceptions.RequestException: On network or HTTP errors.
         """
         logger.info(f"Fetching search results from LinkedIn")
         
@@ -156,13 +163,17 @@ class LinkedInScraper:
     
     def extract_job_links(self, html: str) -> List[str]:
         """
-        Extract job links from search results HTML.
+        Parse search result HTML to extract individual job posting URLs.
+        
+        Loads the HTML into BeautifulSoup and searches for anchor tags pointing
+        to '/jobs/view/'. Cleans and normalizes the extracted URLs by stripping
+        query parameters to avoid tracking codes and duplicates.
         
         Args:
-            html: HTML content of search results page
+            html: Raw HTML string of the LinkedIn search results page.
         
         Returns:
-            List of job URLs
+            A deduplicated list of absolute LinkedIn job posting URLs.
         """
         soup = BeautifulSoup(html, 'html.parser')
         
