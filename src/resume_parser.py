@@ -40,10 +40,18 @@ class ResumeParser:
     @retry_on_failure(max_retries=2)
     def extract_text_pypdf2(self) -> str:
         """
-        Extract text using PyPDF2.
+        Extract text from the PDF using the PyPDF2 library.
+        
+        Opens the file in binary mode, iterates over all pages, and
+        concatenates the extracted text. May produce less accurate results
+        than pdfplumber for PDFs with complex layouts or embedded fonts.
         
         Returns:
-            Extracted text from PDF
+            Concatenated plain text from all pages, stripped of leading/
+            trailing whitespace.
+            
+        Raises:
+            Exception: If PyPDF2 cannot read or decode the PDF.
         """
         try:
             text = ""
@@ -65,10 +73,18 @@ class ResumeParser:
     @retry_on_failure(max_retries=2)
     def extract_text_pdfplumber(self) -> str:
         """
-        Extract text using pdfplumber (more accurate for complex PDFs).
+        Extract text from the PDF using the pdfplumber library.
+        
+        pdfplumber provides higher fidelity extraction than PyPDF2 for PDFs
+        with tables, columns, and non-standard fonts. Appends a newline after
+        each page's text to preserve paragraph boundaries.
         
         Returns:
-            Extracted text from PDF
+            Concatenated plain text from all pages, stripped of leading/
+            trailing whitespace.
+            
+        Raises:
+            Exception: If pdfplumber cannot open or parse the PDF.
         """
         try:
             text = ""
