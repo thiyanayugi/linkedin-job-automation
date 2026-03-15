@@ -65,14 +65,21 @@ Remember: Return ONLY the JSON object, no other text."""
     @retry_on_failure(max_retries=3, delay=2.0, backoff=2.0)
     def match_job(self, resume_text: str, job_description: str) -> Optional[Dict[str, any]]:
         """
-        Match a job with the resume and generate a cover letter.
+        Evaluate a single job description against the provided resume using AI.
+        
+        Submits a custom prompt to the configured OpenAI model, asking it to
+        assess compatibility. The AI is instructed to return a strict JSON payload
+        containing a 0-100 'score' and a generated 'coverLetter'.
+        
+        If the job description is too short (< 50 chars) or the API response
+        is malformed, it gracefully returns a default 0-score dictionary.
         
         Args:
-            resume_text: Text content of the resume
-            job_description: Job description text
+            resume_text: Full text content of the applicant's resume.
+            job_description: Full text content of the LinkedIn job posting.
         
         Returns:
-            Dictionary with 'score' and 'coverLetter' keys
+            Dictionary containing integer 'score' and string 'coverLetter'.
         """
         if not job_description or len(job_description) < 50:
             logger.warning("Job description too short, skipping AI matching")
