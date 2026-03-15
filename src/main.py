@@ -1,6 +1,9 @@
 """
-Main Application
-Orchestrates the LinkedIn job search automation.
+Main Application Module
+
+Orchestrates the full LinkedIn job search automation pipeline:
+resume parsing → job scraping → AI matching → Sheets logging → Telegram alerts.
+Supports both one-shot and scheduled (daily) execution modes.
 """
 
 import os
