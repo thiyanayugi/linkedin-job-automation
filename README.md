@@ -162,16 +162,15 @@ linkedin-job-automation/
 
 ## How It Works
 
-1. **Initialization**: Loads your resume and search filters
-2. **LinkedIn Search**: Constructs search URL and fetches job listings
-3. **Job Extraction**: Parses HTML to extract job details
-4. **AI Analysis**: For each job:
-   - Compares job description with your resume
-   - Generates compatibility score (0-100)
-   - Creates personalized cover letter
-5. **Filtering**: Only processes jobs above score threshold
-6. **Storage**: Saves results to Google Sheets
-7. **Notification**: Sends Telegram alert for high-scoring matches
+1. **Initialization**: Loads your resume PDF and validates all environment variables. Falls back gracefully if optional services (e.g., Telegram) are misconfigured.
+2. **LinkedIn Search**: Builds a parameterized search URL from `config/filters.json` and scrapes the search results page via HTTP, respecting rate limits with configurable delays.
+3. **Job Extraction**: Parses the search results HTML using BeautifulSoup to isolate individual job posting URLs and strips tracking parameters for clean canonical links.
+4. **AI Analysis**: For each job posting, the full page is fetched and then submitted alongside your resume to the OpenAI chat API. The model returns:
+   - A compatibility **score** (0–100) reflecting how well your background fits the role
+   - A personalised **cover letter** based on your resume and the job description
+5. **Filtering**: Only jobs scoring at or above `MIN_SCORE_THRESHOLD` proceed to notifications, keeping your inbox focused on the best matches.
+6. **Storage**: All scored jobs are written to the configured Google Sheet with deduplication — existing entries are updated rather than duplicated.
+7. **Notification**: A Telegram push notification is sent for every high-scoring job, and a run summary is delivered at the end of each automation cycle.
 
 ## Troubleshooting
 
