@@ -1,6 +1,9 @@
 """
 Telegram Notifier Module
-Sends notifications via Telegram bot.
+
+Delivers real-time job match notifications and run summaries to the user's
+Telegram account using the python-telegram-bot library. HTML formatting is
+enabled for richer message presentation.
 """
 
 import os
@@ -13,16 +16,26 @@ logger = setup_logger(__name__)
 
 
 class TelegramNotifier:
-    """Send job notifications via Telegram."""
+    """
+    Deliver job match alerts and run summaries via a Telegram bot.
+    
+    Supports sending raw text messages, structured job notifications with
+    score and apply-link, batch run summaries, and error alerts. All methods
+    silently no-op when notifications are disabled (enabled=False).
+    """
     
     def __init__(self, bot_token: str, chat_id: str, enabled: bool = True):
         """
-        Initialize the Telegram notifier.
+        Create and validate the Telegram bot connection.
+        
+        If credentials are missing or the Bot instantiation raises an exception,
+        the notifier self-disables (enabled = False) rather than crashing the
+        entire automation pipeline.
         
         Args:
-            bot_token: Telegram bot token
-            chat_id: Telegram chat ID to send messages to
-            enabled: Whether notifications are enabled
+            bot_token: Token issued by @BotFather for the Telegram bot.
+            chat_id: Numeric or string ID of the Telegram chat to send messages to.
+            enabled: Set to False to suppress all notifications (default: True).
         """
         self.bot_token = bot_token
         self.chat_id = chat_id
