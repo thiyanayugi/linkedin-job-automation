@@ -105,6 +105,8 @@ Remember: Return ONLY the JSON object, no other text."""
                 model=self.model,
                 messages=[
                     {
+                        # System message primes the model with the expected
+                        # role and strict output format before the user prompt
                         "role": "system",
                         "content": "You are a professional job matching assistant. You analyze resumes and job descriptions to provide matching scores and generate cover letters. Always respond with valid JSON only."
                     },
@@ -113,7 +115,9 @@ Remember: Return ONLY the JSON object, no other text."""
                         "content": prompt
                     }
                 ],
+                # temperature=0.7 balances creativity and consistency for cover letters
                 temperature=0.7,
+                # max_tokens=1000 is sufficient for a JSON score + 2-paragraph cover letter
                 max_tokens=1000
             )
             
