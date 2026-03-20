@@ -15,7 +15,14 @@ logger = setup_logger(__name__)
 
 
 class SheetsManager:
-    """Manage Google Sheets operations for job data."""
+    """
+    Manage Google Sheets read and write operations for job automation data.
+    
+    Authenticates via a Google service account JSON file and exposes methods
+    to persist job records, read filter configurations, and manage worksheet
+    headers. All API calls are decorated with @retry_on_failure to handle
+    transient quota or connection errors from the Sheets API.
+    """
     
     SCOPES = [
         'https://www.googleapis.com/auth/spreadsheets',
@@ -24,11 +31,19 @@ class SheetsManager:
     
     def __init__(self, credentials_file: str, sheet_id: str):
         """
-        Initialize the Google Sheets manager.
+        Load credentials and open the target Google Spreadsheet.
+        
+        Validates that the credentials file exists before attempting to
+        authenticate. Calls _authenticate() internally to create the gspread
+        client and open the spreadsheet by its unique sheet ID.
         
         Args:
-            credentials_file: Path to Google service account credentials JSON
-            sheet_id: Google Sheet ID
+            credentials_file: File path to the Google service account JSON file.
+            sheet_id: The unique identifier from the Google Sheets URL
+                      (the long alphanumeric string after /d/ in the URL).
+        
+        Raises:
+            FileNotFoundError: If credentials_file does not exist on disk.
         """
         self.credentials_file = credentials_file
         self.sheet_id = sheet_id
