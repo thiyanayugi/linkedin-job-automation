@@ -14,10 +14,11 @@ A Python-based automation tool that searches LinkedIn for jobs, matches them aga
 
 ## Prerequisites
 
-- Python 3.8 or higher
-- Google Cloud account (for Sheets API)
-- OpenAI API key
-- Telegram Bot (optional, for notifications)
+- Python **3.8 or higher** (3.10+ recommended for best compatibility with dependencies)
+- Google Cloud account with the **Sheets API** and **Drive API** enabled
+- OpenAI API key with access to the `gpt-4o-mini` model (or a compatible chat model)
+- Telegram Bot token from [@BotFather](https://t.me/botfather) *(optional — only needed for notifications)*
+- A Google Sheets service account JSON credentials file
 
 ## Installation
 
