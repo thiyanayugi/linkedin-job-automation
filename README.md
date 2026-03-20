@@ -176,20 +176,23 @@ linkedin-job-automation/
 
 ### LinkedIn Blocking Requests
 
-- Add delays between requests (already implemented)
-- Use a VPN if needed
-- Consider using LinkedIn's official API (requires approval)
+- The scraper uses configurable delays (`REQUEST_DELAY_SECONDS`) between requests — increase this value (e.g., to `15` or `20`) if you see frequent blocks
+- Rotate your User-Agent header in `linkedin_scraper.py` if requests are consistently rejected
+- Use a VPN or residential proxy if your IP has been rate-limited
+- Consider LinkedIn's official Jobs API for production use (requires an approved partner application)
 
 ### Google Sheets Permission Error
 
-- Ensure the service account email has edit access to your sheet
-- Check that the credentials file path is correct
+- Ensure the service account email (visible in the JSON credentials file) has **Editor** access to your spreadsheet
+- Verify the `GOOGLE_SHEET_ID` value matches the ID in the Sheet URL (the string between `/d/` and `/edit`)
+- Check that both the **Sheets API** and **Drive API** are enabled in your Google Cloud project
 
 ### OpenAI Rate Limits
 
-- Reduce the number of jobs processed per run
-- Increase delays between API calls
-- Upgrade your OpenAI plan
+- Lower `MAX_JOBS_PER_RUN` in `.env` to reduce the number of API calls per run
+- Increase `REQUEST_DELAY_SECONDS` to add breathing room between requests
+- Retry failed runs — transient rate-limit errors are handled automatically with exponential backoff
+- Upgrade your OpenAI plan or request a quota increase if limits persist
 
 ## Legal & Ethical Considerations
 
