@@ -101,7 +101,10 @@ def retry_on_failure(max_retries: int = 3, delay: float = 1.0, backoff: float = 
                             f"Attempt {attempt + 1}/{max_retries + 1} failed for {func.__name__}: {str(e)}. "
                             f"Retrying in {current_delay:.1f}s..."
                         )
+                        # Pause before the next attempt
                         time.sleep(current_delay)
+                        # Exponential backoff: multiply the delay by the backoff
+                        # factor so each subsequent retry waits progressively longer
                         current_delay *= backoff
                     else:
                         logger = logging.getLogger(__name__)
@@ -286,14 +289,22 @@ def extract_job_id_from_url(url: str) -> str:
 
 def validate_config(config: dict, required_keys: list) -> bool:
     """
-    Validate that a configuration dictionary has all required keys.
+    Verify that all mandatory keys are present and non-empty in a config dict.
+    
+    Iterates over required_keys and collects any that are absent from config
+    or whose value is falsy (None, empty string, 0, etc.). Raises a descriptive
+    ValueError listing every missing key at once.
     
     Args:
-        config: Configuration dictionary
-        required_keys: List of required keys
+        config: A dictionary of configuration values to validate.
+        required_keys: List of key names that must exist and be truthy.
     
     Returns:
-        True if valid, raises ValueError otherwise
+        True if all required keys are present and non-empty.
+    
+    Raises:
+        ValueError: If one or more required keys are missing or empty,
+                    with the offending key names listed in the message.
     """
     missing_keys = [key for key in required_keys if key not in config or not config[key]]
     if missing_keys:
