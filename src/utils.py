@@ -205,15 +205,20 @@ def parse_time_string(time_str: str) -> tuple:
 
 def truncate_text(text: str, max_length: int = 100, suffix: str = "...") -> str:
     """
-    Truncate text to a maximum length.
+    Shorten a string to at most max_length characters.
+    
+    If the text is already within the limit it is returned unchanged.
+    When truncation is needed the suffix (default '...') is appended so
+    the total length still does not exceed max_length.
     
     Args:
-        text: Text to truncate
-        max_length: Maximum length
-        suffix: Suffix to add if truncated
+        text: Input string to potentially shorten.
+        max_length: Maximum allowed character count including the suffix.
+        suffix: String appended when truncation occurs (default: '...').
     
     Returns:
-        Truncated text
+        Original text if within limit, otherwise a truncated version with
+        the suffix appended.
     """
     if len(text) <= max_length:
         return text
@@ -241,26 +246,36 @@ def clean_html_text(html_text: str) -> str:
 
 def format_job_url(job_id: str) -> str:
     """
-    Format a LinkedIn job URL from a job ID.
+    Construct a canonical LinkedIn job posting URL from a numeric job ID.
+    
+    Useful for generating consistent, trackable links that avoid session-
+    specific query parameters returned by the search results page.
     
     Args:
-        job_id: LinkedIn job ID
+        job_id: LinkedIn's numeric job identifier, typically extracted
+                from the job posting page or its URL.
     
     Returns:
-        Full job URL
+        Absolute LinkedIn job URL in the format:
+        https://www.linkedin.com/jobs/view/<job_id>
     """
     return f"https://www.linkedin.com/jobs/view/{job_id}"
 
 
 def extract_job_id_from_url(url: str) -> str:
     """
-    Extract job ID from a LinkedIn job URL.
+    Parse the numeric job ID out of a LinkedIn job posting URL.
+    
+    Uses a regex to locate the first sequence of digits that follows
+    '/jobs/view/' in the URL. This handles both clean canonical URLs
+    and URLs with extra query parameters or trailing slashes.
     
     Args:
-        url: LinkedIn job URL
+        url: A LinkedIn job posting URL, e.g.
+             'https://www.linkedin.com/jobs/view/1234567890'
     
     Returns:
-        Job ID
+        The extracted job ID string, or an empty string if not found.
     """
     import re
     match = re.search(r'/jobs/view/(\d+)', url)
