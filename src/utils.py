@@ -141,13 +141,19 @@ def rate_limit(calls: int = 1, period: float = 1.0) -> Callable:
     def decorator(func: Callable) -> Callable:
         @wraps(func)
         def wrapper(*args, **kwargs) -> Any:
+            # Calculate how much time has passed since the last call
             elapsed = time.time() - last_called[0]
+            # Compute remaining wait time to honor the minimum interval
             left_to_wait = min_interval - elapsed
             
+            # If the minimum interval hasn't elapsed yet, sleep for the remainder
             if left_to_wait > 0:
                 time.sleep(left_to_wait)
             
             result = func(*args, **kwargs)
+            # Record the call timestamp AFTER the function returns so that
+            # the measured interval begins from the end of the function, not
+            # the start; this avoids drift accumulation in tight call loops
             last_called[0] = time.time()
             return result
         
