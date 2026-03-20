@@ -13,15 +13,22 @@ import colorlog
 
 def setup_logger(name: str, log_file: str = None, level: str = "INFO") -> logging.Logger:
     """
-    Set up a colored logger with file and console handlers.
+    Set up a colored console logger with an optional rotating file handler.
+    
+    Console output uses colorlog to visually distinguish log levels:
+    DEBUG=cyan, INFO=green, WARNING=yellow, ERROR/CRITICAL=red.
+    File output writes the same messages in plain text without ANSI color codes.
+    Parent directories for the log file are created automatically if missing.
     
     Args:
-        name: Logger name
-        log_file: Path to log file (optional)
-        level: Logging level (DEBUG, INFO, WARNING, ERROR, CRITICAL)
+        name: Logger name, typically passed as __name__ by the calling module.
+        log_file: Absolute or relative path for persisting logs to disk. If
+                  omitted, only the console handler is attached.
+        level: Minimum logging level string (DEBUG, INFO, WARNING, ERROR,
+               CRITICAL). Defaults to 'INFO'.
     
     Returns:
-        Configured logger instance
+        A fully configured logging.Logger instance ready for use.
     """
     logger = logging.getLogger(name)
     logger.setLevel(getattr(logging, level.upper()))
