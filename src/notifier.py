@@ -40,11 +40,14 @@ class TelegramNotifier:
         self.bot_token = bot_token
         self.chat_id = chat_id
         self.enabled = enabled
+        # bot is lazily assigned only when credentials are valid
         self.bot = None
         
         if self.enabled:
+            # Guard: both token and chat_id must be provided for the bot to work
             if not bot_token or not chat_id:
                 logger.warning("Telegram credentials missing, notifications disabled")
+                # Self-disable to prevent repeated failed send attempts later
                 self.enabled = False
             else:
                 try:
@@ -52,6 +55,8 @@ class TelegramNotifier:
                     logger.info("Initialized TelegramNotifier")
                 except Exception as e:
                     logger.error(f"Failed to initialize Telegram bot: {str(e)}")
+                    # Gracefully degrade: disable rather than raising to avoid
+                    # crashing the entire automation pipeline on a notification failure
                     self.enabled = False
         else:
             logger.info("Telegram notifications disabled")
