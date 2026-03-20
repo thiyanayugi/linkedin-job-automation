@@ -1,6 +1,9 @@
 """
 AI Matcher Module
-Uses OpenAI to match jobs with resume and generate cover letters.
+
+Leverages the OpenAI API to score the compatibility between a candidate's
+resume and individual LinkedIn job descriptions, and to generate a tailored
+cover letter for each matching role.
 """
 
 import os
@@ -13,15 +16,23 @@ logger = setup_logger(__name__)
 
 
 class AIMatcher:
-    """Match jobs with resume using AI and generate cover letters."""
+    """
+    Score job-resume compatibility and generate cover letters using OpenAI.
+    
+    Wraps an OpenAI client and exposes a high-level interface for single-job
+    evaluation (match_job) and batch processing (batch_match_jobs). All API
+    calls include exponential-backoff retry logic via the @retry_on_failure
+    decorator.
+    """
     
     def __init__(self, api_key: str, model: str = "gpt-4o-mini"):
         """
-        Initialize the AI matcher.
+        Configure the OpenAI client with the specified model.
         
         Args:
-            api_key: OpenAI API key
-            model: OpenAI model to use
+            api_key: OpenAI API secret key for authenticating requests.
+            model: OpenAI model identifier to use for completions
+                   (default: 'gpt-4o-mini'). Must support chat completions.
         """
         self.client = OpenAI(api_key=api_key)
         self.model = model
