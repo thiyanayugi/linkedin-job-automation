@@ -24,6 +24,9 @@ class SheetsManager:
     transient quota or connection errors from the Sheets API.
     """
     
+    # Required OAuth2 scopes for the service account:
+    # - spreadsheets: full read/write access to Sheets data
+    # - drive: needed by gspread to look up spreadsheets by name or ID
     SCOPES = [
         'https://www.googleapis.com/auth/spreadsheets',
         'https://www.googleapis.com/auth/drive'
