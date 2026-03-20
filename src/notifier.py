@@ -83,7 +83,10 @@ class TelegramNotifier:
             self.bot.send_message(
                 chat_id=self.chat_id,
                 text=message,
+                # HTML parse mode allows <b>, <i>, <a href>, and <code> tags
+                # in message text for richer, more readable notifications
                 parse_mode='HTML',
+                # Keep web previews enabled so job links render as cards in Telegram
                 disable_web_page_preview=False
             )
             
