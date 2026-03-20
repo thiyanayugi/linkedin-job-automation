@@ -16,7 +16,14 @@ logger = setup_logger(__name__)
 
 
 class LinkedInScraper:
-    """Scrape LinkedIn job listings based on search criteria."""
+    """
+    Scrape job listings from LinkedIn's public job search pages.
+    
+    Uses a persistent requests.Session with browser-like headers to reduce
+    detection risk. Enforces configurable inter-request delays and decorates
+    all fetch methods with @rate_limit and @retry_on_failure for resilient,
+    polite scraping. Parses HTML with BeautifulSoup to extract job data.
+    """
     
     def __init__(self, delay_seconds: int = 10):
         """
